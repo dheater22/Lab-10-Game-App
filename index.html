@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div id="start-screen" class="screen active">
+      <div class="screen-content">
+        <h1>Snake Game</h1>
+        <p>Use arrow keys to move the snake</p>
+        <button id="play-btn" class="btn">Play</button>
+      </div>
+    </div>
+
+    <div id="game-screen" class="screen">
+      <div class="game-info">
+        <div class="score-info">
+          <div>Score: <span id="current-score">0</span></div>
+          <div>High Score: <span id="high-score">0</span></div>
+        </div>
+        <button id="debug-toggle" class="btn-small">Debug</button>
+      </div>
+      <canvas id="game-canvas" width="400" height="400"></canvas>
+    </div>
+
+    <div id="game-over-screen" class="screen">
+      <div class="screen-content">
+        <h1>Game Over</h1>
+        <p>Score: <span id="final-score">0</span></p>
+        <p>High Score: <span id="final-high-score">0</span></p>
+        <button id="restart-btn" class="btn">Play Again</button>
+        <button id="menu-btn" class="btn btn-secondary">Main Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="storage/saveManager.js"></script>
+  <script src="game/grid.js"></script>
+  <script src="game/snake.js"></script>
+  <script src="game/food.js"></script>
+  <script src="game/renderer.js"></script>
+  <script src="game/engine.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
