@@ -12,6 +12,10 @@ const debugToggle = document.getElementById('debug-toggle');
 // Canvas
 const canvas = document.getElementById('game-canvas');
 
+// Score display elements
+const currentScoreEl = document.getElementById('current-score');
+const highScoreEl = document.getElementById('high-score');
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   Renderer.init(canvas);
@@ -24,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
   debugToggle.addEventListener('click', handleDebugToggle);
 
   document.addEventListener('keydown', handleKeyPress);
-  document.addEventListener('keyup', handleKeyUp);
 
   updateHighScoreDisplay();
+  startGameLoop();
 });
 
 function handlePlay() {
@@ -41,8 +45,8 @@ function handleRestart() {
 }
 
 function handleMenu() {
+  GameEngine.resetGame();
   showScreen('start');
-  GameEngine.init();
 }
 
 function handleDebugToggle() {
@@ -50,6 +54,8 @@ function handleDebugToggle() {
 }
 
 function handleKeyPress(e) {
+  if (GameEngine.gameState.status !== 'RUNNING') return;
+
   switch (e.key) {
     case 'ArrowUp':
       e.preventDefault();
@@ -74,10 +80,6 @@ function handleKeyPress(e) {
   }
 }
 
-function handleKeyUp(e) {
-  // Optional: Add key release handling if needed
-}
-
 function showScreen(screenName) {
   startScreen.classList.remove('active');
   gameScreen.classList.remove('active');
@@ -95,14 +97,22 @@ function showScreen(screenName) {
 }
 
 function updateHighScoreDisplay() {
-  document.getElementById('high-score').textContent = GameEngine.gameState.highScore;
+  highScoreEl.textContent = GameEngine.gameState.highScore;
 }
 
-// Observer pattern for game over
-const originalEndGame = GameEngine.endGame.bind(GameEngine);
-GameEngine.endGame = function() {
-  originalEndGame();
-  setTimeout(() => {
-    showScreen('gameover');
-  }, 100);
-};
+function updateCurrentScoreDisplay() {
+  currentScoreEl.textContent = GameEngine.gameState.score;
+}
+
+let statusCheckInterval;
+
+function startGameLoop() {
+  statusCheckInterval = setInterval(() => {
+    updateCurrentScoreDisplay();
+
+    if (GameEngine.gameState.status === 'GAME_OVER') {
+      showScreen('gameover');
+      clearInterval(statusCheckInterval);
+    }
+  }, 50);
+}
